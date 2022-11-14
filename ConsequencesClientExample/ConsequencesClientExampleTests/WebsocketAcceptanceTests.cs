@@ -17,7 +17,7 @@ namespace ConsequencesClientExampleTests
         public void WhenISendAnInitialMessageToServer_ServerRespondsWithWelcomeMessage()
         {
             // Arrange
-            OutboundMessage helloMessage = OutboundMessageParser.GetHelloMessage();
+            string helloMessage = OutboundMessageParser.GetHelloMessage();
 
             // Act
             socketClient.Connect("ws://51.141.52.52:1234");

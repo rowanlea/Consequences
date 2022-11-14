@@ -2,9 +2,9 @@
 {
     public class OutboundMessageParser
     {
-        public static OutboundMessage GetHelloMessage()
+        public static string GetHelloMessage()
         {
-            throw new NotImplementedException();
+            return "Hello";
         }
     }
 }
