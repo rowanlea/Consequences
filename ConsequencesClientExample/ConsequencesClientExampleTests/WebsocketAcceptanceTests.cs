@@ -11,6 +11,7 @@ namespace ConsequencesClientExampleTests
         public void Setup()
         {
             socketClient = new SocketClient();
+            socketClient.Connect("ws://51.141.52.52:1234");
         }
 
         [Test]
@@ -20,7 +21,6 @@ namespace ConsequencesClientExampleTests
             string helloMessage = OutboundMessageParser.GetHelloMessage();
 
             // Act
-            socketClient.Connect("ws://51.141.52.52:1234");
             socketClient.Send(helloMessage);
             string jsonResponse = socketClient.Receive();
             InboundResponse response = InboundResponseParser.Parse(jsonResponse);
@@ -40,7 +40,6 @@ namespace ConsequencesClientExampleTests
             OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Pizza");
 
             // Act
-            socketClient.Connect("ws://51.141.52.52:1234");
             socketClient.Send(helloMessage);
             socketClient.Receive();
             socketClient.Send(setupMessage);
@@ -63,11 +62,10 @@ namespace ConsequencesClientExampleTests
         {
             // Arrange
             string helloMessage = OutboundMessageParser.GetHelloMessage();
-            OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Pizza");
+            OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Hotdog");
             OutboundMessage answerMessage = OutboundMessageParser.GetAnswerMessage("Happy Henry");
 
             // Act
-            socketClient.Connect("ws://51.141.52.52:1234");
             socketClient.Send(helloMessage);
             socketClient.Receive();
             socketClient.Send(setupMessage);
