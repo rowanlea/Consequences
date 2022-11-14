@@ -6,5 +6,10 @@
         {
             return "Hello";
         }
+
+        internal static OutboundMessage GetSetupMessage(string name, string room)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

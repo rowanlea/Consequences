@@ -37,7 +37,7 @@ namespace ConsequencesClientExampleTests
         {
             // Arrange
             string helloMessage = OutboundMessageParser.GetHelloMessage();
-            string setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Pizza");
+            OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Pizza");
 
             // Act
             socketClient.Connect("ws://51.141.52.52:1234");
