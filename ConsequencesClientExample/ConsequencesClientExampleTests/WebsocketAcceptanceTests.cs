@@ -28,7 +28,7 @@ namespace ConsequencesClientExampleTests
             // Assert
             Assert.That(response, Is.Not.Null);
             Assert.That(response.Message, Is.Not.Null);
-            Assert.That(response.Message.Length > 0);
+            Assert.That(response.Message.Length, Is.GreaterThan(0));
             Assert.That(response.Message, Is.EqualTo("Welcome to Consequences, to get started send your name and room code."));
         }
 
@@ -51,11 +51,38 @@ namespace ConsequencesClientExampleTests
             // Assert
             Assert.That(response, Is.Not.Null);
             Assert.That(response.Message, Is.Not.Null);
-            Assert.That(response.Message.Length > 0);
+            Assert.That(response.Message.Length, Is.GreaterThan(0));
             Assert.That(response.Question, Is.Not.Null);
-            Assert.That(response.Question.Length > 0);
-            Assert.That(response.Players.Count > 0);
+            Assert.That(response.Question.Length, Is.GreaterThan(0));
+            Assert.That(response.Players.Count, Is.GreaterThan(0));
             Assert.That(response.Players.Contains("Rowan"));
+        }
+
+        [Test]
+        public void WhenISendAnswer_ServerRespondsWithNextQuestion()
+        {
+            // Arrange
+            string helloMessage = OutboundMessageParser.GetHelloMessage();
+            OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Pizza");
+            OutboundMessage answerMessage = OutboundMessageParser.GetAnswerMessage("Happy Henry");
+
+            // Act
+            socketClient.Connect("ws://51.141.52.52:1234");
+            socketClient.Send(helloMessage);
+            socketClient.Receive();
+            socketClient.Send(setupMessage);
+
+            string firstResponse = socketClient.Receive();
+            string firstQuestion = InboundResponseParser.Parse(firstResponse).Question;
+
+            socketClient.Send(answerMessage);
+            string secondResponse = socketClient.Receive();
+            string secondQuestion = InboundResponseParser.Parse(secondResponse).Question;
+
+            // Assert
+            Assert.That(firstQuestion.Length, Is.GreaterThan(0));
+            Assert.That(secondQuestion.Length, Is.GreaterThan(0));
+            Assert.That(firstQuestion, Is.Not.EqualTo(secondQuestion));
         }
     }
 }
