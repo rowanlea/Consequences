@@ -54,7 +54,7 @@ namespace ConsequencesClientExampleTests
             Assert.That(response.Message.Length > 0);
             Assert.That(response.Question, Is.Not.Null);
             Assert.That(response.Question.Length > 0);
-            Assert.That(response.Players.Length > 0);
+            Assert.That(response.Players.Count > 0);
         }
     }
 }
