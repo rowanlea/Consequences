@@ -1,20 +1,42 @@
-﻿namespace ConsequencesClientExample.Websocket
+﻿using System.Collections.Concurrent;
+using System.Text.Json;
+using Websocket.Client;
+
+namespace ConsequencesClientExample.Websocket
 {
     public class SocketClient
     {
-        public void Connect(string v)
+        private ManualResetEvent _exitEvent;
+        private WebsocketClient _client;
+        internal BlockingCollection<string> _responseList;
+
+        public SocketClient()
         {
-            throw new NotImplementedException();
+            _responseList = new BlockingCollection<string>();
         }
 
-        public void Send(object helloMessage)
+        public async void Connect(string address)
         {
-            throw new NotImplementedException();
+            Uri uri = new Uri(address);
+            _client = new WebsocketClient(uri);
+
+            _client.MessageReceived.Subscribe(response => _responseList.Add(response.Text));
+            await _client.Start();
+
+            _exitEvent = new ManualResetEvent(false);
+            _exitEvent.WaitOne();
+        }
+
+        public void Send(object message)
+        {
+            var serialisedMessage = JsonSerializer.Serialize(message);
+            _client.Send(serialisedMessage);
         }
 
         public string Receive()
         {
-            throw new NotImplementedException();
+            var response = _responseList.Take();
+            return response;
         }
     }
 }
