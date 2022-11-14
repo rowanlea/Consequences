@@ -13,17 +13,15 @@ namespace ConsequencesClientExample.Websocket
         public SocketClient()
         {
             _responseList = new BlockingCollection<string>();
+            _exitEvent = new ManualResetEvent(false);
         }
 
         public async void Connect(string address)
         {
-            Uri uri = new Uri(address);
-            _client = new WebsocketClient(uri);
-
+            _client = new WebsocketClient(new Uri(address));
             _client.MessageReceived.Subscribe(response => _responseList.Add(response.Text));
             await _client.Start();
 
-            _exitEvent = new ManualResetEvent(false);
             _exitEvent.WaitOne();
         }
 
