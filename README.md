@@ -54,4 +54,5 @@ There are lots of different methods you could use to TDD this kata:
 To connect to the websocket server you need to use: **ws://51.141.52.52:1234**
 
 ## Notes
-The extra punctuation and words to structure the final results are coded into the server, so you just need to answer the question normally.
+- The extra punctuation and words to structure the final results are coded into the server, so you just need to answer the question normally.
+- If you run multiple tests too quickly one after the other they might run before your room has been cleared up, you can prevent this by using a different room in each of your tests.
