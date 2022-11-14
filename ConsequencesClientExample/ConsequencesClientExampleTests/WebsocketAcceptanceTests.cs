@@ -19,8 +19,7 @@ namespace ConsequencesClientExampleTests
             // Arrange and Act
             socketClient.Connect("ws://51.141.52.52:1234");
             socketClient.Send(start: "Hello");
-            string jsonResponse = socketClient.Receive();
-            InboundResponse response = InboundResponseParser.Parse(jsonResponse);
+            var response = socketClient.Receive();
 
             // Assert
             Assert.That(response, Is.Not.Null);
@@ -39,8 +38,7 @@ namespace ConsequencesClientExampleTests
             socketClient.Send(name: "Rowan", room: "Pizza");
 
             // Act
-            string jsonResponse = socketClient.Receive();
-            InboundResponse response = InboundResponseParser.Parse(jsonResponse);
+            var response = socketClient.Receive();
 
             // Assert
             Assert.That(response, Is.Not.Null);
@@ -62,17 +60,41 @@ namespace ConsequencesClientExampleTests
             socketClient.Send(name: "Rowan", room: "Hotdog");
 
             // Act
-            string firstResponse = socketClient.Receive();
-            string firstQuestion = InboundResponseParser.Parse(firstResponse).Question;
-
+            var firstQuestion = socketClient.Receive().Question;
             socketClient.Send(answer: "Happy Henry");
-            string secondResponse = socketClient.Receive();
-            string secondQuestion = InboundResponseParser.Parse(secondResponse).Question;
+            var secondQuestion = socketClient.Receive().Question;
 
             // Assert
             Assert.That(firstQuestion.Length, Is.GreaterThan(0));
             Assert.That(secondQuestion.Length, Is.GreaterThan(0));
             Assert.That(firstQuestion, Is.Not.EqualTo(secondQuestion));
+        }
+
+        [Test]
+        public void WhenISendAllAnswers_ServerRespondsWithCompletedAnswer()
+        {
+            socketClient.Connect("ws://51.141.52.52:1234");
+            socketClient.Send(start: "Hello");
+            socketClient.Receive();
+            socketClient.Send(name: "Rowan", room: "Burger");
+            socketClient.Receive();
+            socketClient.Send(answer: "Happy Henry");
+            socketClient.Receive();
+            socketClient.Send(answer: "Smiling Sam");
+            socketClient.Receive();
+            socketClient.Send(answer: "the supermarket");
+            socketClient.Receive();
+            socketClient.Send(answer: "eat cake");
+            socketClient.Receive();
+            socketClient.Send(answer: "lost their shoe");
+            socketClient.Receive();
+            socketClient.Send(answer: "solved a riddle");
+            socketClient.Receive();
+            socketClient.Send(answer: "zombies rose from the dead");
+
+            var finalAnswer = socketClient.Receive();
+
+            Assert.That(finalAnswer.Results.Contains("Happy Henry met Smiling Sam at the supermarket to eat cake. Henry lost their shoe, whilst Sam solved a riddle. The consequence of their actions was zombies rose from the dead."));
         }
     }
 }

@@ -33,10 +33,11 @@ namespace ConsequencesClientExample.Websocket
             _client.Send(serialisedMessage);
         }
 
-        public string Receive()
+        public InboundResponse Receive()
         {
             var response = _responseList.Take();
-            return response;
+            var parsedResponse = InboundResponseParser.Parse(response);
+            return parsedResponse;
         }
     }
 }

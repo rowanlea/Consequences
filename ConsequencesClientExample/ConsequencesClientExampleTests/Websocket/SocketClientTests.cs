@@ -9,13 +9,13 @@ namespace ConsequencesClientExampleTests.Websocket
         {
             // Arrange
             SocketClient socketClient = new SocketClient();
-            socketClient._responseList.Add("Test");
+            socketClient._responseList.Add("{\"Message\":\"Test\"}");
 
             // Act
             var response = socketClient.Receive();
 
             // Assert
-            Assert.That(response, Is.EqualTo("Test"));
+            Assert.That(response.Message, Is.EqualTo("Test"));
         }
     }
 }
