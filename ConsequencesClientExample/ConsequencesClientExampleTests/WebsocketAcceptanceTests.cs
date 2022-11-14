@@ -29,6 +29,7 @@ namespace ConsequencesClientExampleTests
             Assert.That(response, Is.Not.Null);
             Assert.That(response.Message, Is.Not.Null);
             Assert.That(response.Message.Length > 0);
+            Assert.That(response.Message, Is.EqualTo("Welcome to Consequences, to get started send your name and room code."));
         }
     }
 }
