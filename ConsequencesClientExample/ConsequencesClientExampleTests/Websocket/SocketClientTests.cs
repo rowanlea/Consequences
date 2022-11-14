@@ -1,5 +1,4 @@
-﻿using ConsequencesClientExample.Messaging;
-using ConsequencesClientExample.Websocket;
+﻿using ConsequencesClientExample.Websocket;
 
 namespace ConsequencesClientExampleTests.Websocket
 {

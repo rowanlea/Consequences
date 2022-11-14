@@ -11,17 +11,14 @@ namespace ConsequencesClientExampleTests
         public void Setup()
         {
             socketClient = new SocketClient();
-            socketClient.Connect("ws://51.141.52.52:1234");
         }
 
         [Test]
         public void WhenISendAnInitialMessageToServer_ServerRespondsWithWelcomeMessage()
         {
-            // Arrange
-            string helloMessage = OutboundMessageParser.GetHelloMessage();
-
-            // Act
-            socketClient.Send(helloMessage);
+            // Arrange and Act
+            socketClient.Connect("ws://51.141.52.52:1234");
+            socketClient.Send(start: "Hello");
             string jsonResponse = socketClient.Receive();
             InboundResponse response = InboundResponseParser.Parse(jsonResponse);
 
@@ -36,14 +33,12 @@ namespace ConsequencesClientExampleTests
         public void WhenISendANameAndRoomCode_ServerRespondsWithMessageAndQuestion()
         {
             // Arrange
-            string helloMessage = OutboundMessageParser.GetHelloMessage();
-            OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Pizza");
+            socketClient.Connect("ws://51.141.52.52:1234");
+            socketClient.Send(start: "Hello");
+            socketClient.Receive();
+            socketClient.Send(name: "Rowan", room: "Pizza");
 
             // Act
-            socketClient.Send(helloMessage);
-            socketClient.Receive();
-            socketClient.Send(setupMessage);
-
             string jsonResponse = socketClient.Receive();
             InboundResponse response = InboundResponseParser.Parse(jsonResponse);
 
@@ -61,19 +56,16 @@ namespace ConsequencesClientExampleTests
         public void WhenISendAnswer_ServerRespondsWithNextQuestion()
         {
             // Arrange
-            string helloMessage = OutboundMessageParser.GetHelloMessage();
-            OutboundMessage setupMessage = OutboundMessageParser.GetSetupMessage("Rowan", "Hotdog");
-            OutboundMessage answerMessage = OutboundMessageParser.GetAnswerMessage("Happy Henry");
+            socketClient.Connect("ws://51.141.52.52:1234");
+            socketClient.Send(start: "Hello");
+            socketClient.Receive();
+            socketClient.Send(name: "Rowan", room: "Hotdog");
 
             // Act
-            socketClient.Send(helloMessage);
-            socketClient.Receive();
-            socketClient.Send(setupMessage);
-
             string firstResponse = socketClient.Receive();
             string firstQuestion = InboundResponseParser.Parse(firstResponse).Question;
 
-            socketClient.Send(answerMessage);
+            socketClient.Send(answer: "Happy Henry");
             string secondResponse = socketClient.Receive();
             string secondQuestion = InboundResponseParser.Parse(secondResponse).Question;
 

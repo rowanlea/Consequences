@@ -1,7 +1,4 @@
 ﻿using ConsequencesClientExample.Messaging;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
-using System.Numerics;
-using System;
 
 namespace ConsequencesClientExampleTests.Messaging
 {

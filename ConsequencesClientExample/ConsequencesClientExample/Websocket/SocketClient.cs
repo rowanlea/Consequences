@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using ConsequencesClientExample.Messaging;
+using System.Collections.Concurrent;
 using System.Text.Json;
 using Websocket.Client;
 
@@ -25,8 +26,9 @@ namespace ConsequencesClientExample.Websocket
             _exitEvent.WaitOne();
         }
 
-        public void Send(object message)
+        public void Send(string start = "", string name = "", string room = "", string answer = "")
         {
+            OutboundMessage message = new OutboundMessage { Start = start, Name = name, Room = room, Answer = answer };
             var serialisedMessage = JsonSerializer.Serialize(message);
             _client.Send(serialisedMessage);
         }
