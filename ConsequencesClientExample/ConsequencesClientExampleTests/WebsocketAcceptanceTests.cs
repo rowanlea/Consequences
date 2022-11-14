@@ -55,6 +55,7 @@ namespace ConsequencesClientExampleTests
             Assert.That(response.Question, Is.Not.Null);
             Assert.That(response.Question.Length > 0);
             Assert.That(response.Players.Count > 0);
+            Assert.That(response.Players.Contains("Rowan"));
         }
     }
 }

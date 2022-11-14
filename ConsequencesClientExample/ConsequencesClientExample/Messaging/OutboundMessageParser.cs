@@ -9,7 +9,10 @@
 
         internal static OutboundMessage GetSetupMessage(string name, string room)
         {
-            throw new NotImplementedException();
+            OutboundMessage message = new OutboundMessage();
+            message.Name = name;
+            message.Room = room;
+            return message;
         }
     }
 }

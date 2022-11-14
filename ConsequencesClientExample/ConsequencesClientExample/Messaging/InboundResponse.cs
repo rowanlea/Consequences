@@ -3,7 +3,7 @@
     public class InboundResponse
     {
         public string Message { get; set; }
-        public string Question { get; internal set; }
-        public List<string> Players { get; internal set; }
+        public string Question { get; set; }
+        public List<string> Players { get; set; }
     }
 }
