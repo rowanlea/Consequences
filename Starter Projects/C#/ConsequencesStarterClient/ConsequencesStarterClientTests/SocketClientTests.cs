@@ -2,7 +2,7 @@ using ConsequencesStarterClient;
 
 namespace ConsequencesStarterClientTests
 {
-    public class WebsocketClientTests
+    public class SocketClientTests
     {
         SocketClient socketClient;
 
