@@ -58,3 +58,5 @@ To connect to the websocket server you need to use: **ws://51.141.52.52:1234**
 ## Notes
 - The extra punctuation and words to structure the final results are coded into the server, so you just need to answer the question normally.
 - If you run multiple tests too quickly one after the other they might run before your room has been cleared up, you can prevent this by using a different room in each of your tests.
+- If you TDD a solo game your answer responses will always contain the next question, however if you play a multiplayer game you will receive a "waiting for other players" message if you answer first, so you can't always rely on a question/answer only flow.
+
