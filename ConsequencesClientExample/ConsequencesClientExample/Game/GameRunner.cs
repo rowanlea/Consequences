@@ -19,8 +19,8 @@ namespace ConsequencesClientExample.Game
             _socketClient.Connect(uri);
             _socketClient.Send(start: "Hello");
 
-            var response = _socketClient.Receive();
-            _throughput.OutputToConsole(response.Message);
+            var setupResponse = _socketClient.Receive();
+            _throughput.OutputToConsole(setupResponse.Message);
 
             _throughput.OutputToConsole("Name:");
             var nameInput = _throughput.TakeUserInput();
@@ -29,6 +29,8 @@ namespace ConsequencesClientExample.Game
 
             _socketClient.Send(name: nameInput, room: roomInput);
 
+            var response = _socketClient.Receive();
+            _throughput.OutputToConsole(response.Message);
         }
     }
 }

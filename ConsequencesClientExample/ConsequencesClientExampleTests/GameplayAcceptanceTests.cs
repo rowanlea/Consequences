@@ -22,7 +22,7 @@ namespace ConsequencesClientExampleTests
 
             throughput.TakeUserInput().Returns("Rowan", "Oak");
 
-            socketClient.Receive().Returns(new InboundResponse { Message = "Give name and room code" });
+            socketClient.Receive().Returns(new InboundResponse { Message = "Give name and room code" }, new InboundResponse { Message = "Wait for players then answer question", Players = new List<string>() { "Rowan", "Finn" }, Question = "Question 1" });
         }
 
         [Test]
@@ -77,5 +77,17 @@ namespace ConsequencesClientExampleTests
             socketClient.Received(1).Send(name: "Rowan", room: "Oak");
         }
 
+        [Test]
+        public void WhenSocketClientReceivesAnyFurtherMessage_ThroughputOutputsThatMessage()
+        {
+            // Arrange
+            GameRunner gameRunner = new GameRunner(throughput, socketClient);
+
+            // Act
+            gameRunner.Start(uri);
+
+            // Assert
+            throughput.Received(1).OutputToConsole("Wait for players then answer question");
+        }
     }
 }
