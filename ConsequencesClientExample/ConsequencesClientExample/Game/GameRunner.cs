@@ -20,12 +20,33 @@ namespace ConsequencesClientExample.Game
             InitialConnection(uri);
             RoomSetup();
 
-            var serverResponse = _socketClient.Receive();
-            OutputPlayerList(serverResponse);
-            OutputMessage(serverResponse);
-            OutputQuestion(serverResponse);
-            var playerResponse = _throughput.TakeUserInput();
-            _socketClient.Send(answer: playerResponse);
+            var totalQuestions = 0;
+
+            while (totalQuestions < 7)
+            {
+                var serverResponse = _socketClient.Receive();
+                OutputPlayerList(serverResponse);
+                OutputMessage(serverResponse);
+                OutputQuestion(serverResponse);
+                var playerResponse = _throughput.TakeUserInput();
+                _socketClient.Send(answer: playerResponse);
+
+                totalQuestions++;
+            }
+
+            OutputFinalResponses();
+        }
+
+        private void OutputFinalResponses()
+        {
+            var finalResponse = _socketClient.Receive();
+            if(finalResponse.Results != null)
+            {
+                foreach (var result in finalResponse.Results)
+                {
+                    _throughput.OutputToConsole(result);
+                }
+            }
         }
 
         private void OutputQuestion(InboundResponse serverResponse)
@@ -62,7 +83,7 @@ namespace ConsequencesClientExample.Game
             if (response.Players.Count > 0)
             {
                 _throughput.OutputToConsole("Players:");
-                foreach(var playerName in response.Players)
+                foreach (var playerName in response.Players)
                 {
                     _throughput.OutputToConsole(playerName);
                 }
