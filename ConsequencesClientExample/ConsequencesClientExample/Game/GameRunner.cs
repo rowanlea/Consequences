@@ -17,6 +17,9 @@ namespace ConsequencesClientExample.Game
         public void Start(string uri)
         {
             _socketClient.Connect(uri);
+
+            var input = _throughput.GetInput();
+            _socketClient.Send(start: input);
         }
     }
 }

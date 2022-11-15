@@ -2,6 +2,7 @@
 using ConsequencesClientExample.InputOutput;
 using ConsequencesClientExample.Websocket;
 using NSubstitute;
+using System.Reactive;
 
 namespace ConsequencesClientExampleTests
 {
@@ -29,15 +30,14 @@ namespace ConsequencesClientExampleTests
             // Arrange
             string uri = "ws://0.0.0.0:1234";
             IThroughput throughput = Substitute.For<IThroughput>();
+            throughput.GetInput().Returns("Hello");
             ISocketClient socketClient = Substitute.For<ISocketClient>();
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act
             gameRunner.Start(uri);
-            throughput.Input("Hello");
 
             // Assert
-            socketClient.Received(1).Connect(uri);
             socketClient.Received(1).Send(start: "Hello");
         }
     }

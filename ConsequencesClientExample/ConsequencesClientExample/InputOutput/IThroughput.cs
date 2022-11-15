@@ -2,6 +2,6 @@
 {
     public interface IThroughput
     {
-        void Input(string input);
+        string GetInput();
     }
 }
