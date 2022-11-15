@@ -65,7 +65,7 @@ namespace ConsequencesClientExampleTests
         }
 
         [Test]
-        public void WhenThroughputReceivesNameAndRoom_SocketClientSendsOutboundMessage()
+        public void WhenNameAndRoomInput_SocketClientSendsOutboundMessage()
         {
             // Arrange
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
@@ -78,7 +78,7 @@ namespace ConsequencesClientExampleTests
         }
 
         [Test]
-        public void WhenSocketClientReceivesAnyFurtherMessage_ThroughputOutputsThatMessage()
+        public void WhenSocketClientReceivesAnyFurtherMessage_OutputsThatMessage()
         {
             // Arrange
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
@@ -91,7 +91,7 @@ namespace ConsequencesClientExampleTests
         }
 
         [Test]
-        public void WhenSocketClientReceivesAnyFurtherMessage_ThroughputOutputsPlayerList()
+        public void WhenSocketClientReceivesAnyFurtherMessage_OutputsPlayerList()
         {
             // Arrange
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
@@ -106,7 +106,7 @@ namespace ConsequencesClientExampleTests
         }
 
         [Test]
-        public void WhenSocketClientReceivesAnyFurtherMessage_ThroughputOutputsQuestion_SendsAnswer()
+        public void WhenSocketClientReceivesAnyFurtherMessage_OutputsQuestion_SendsAnswer()
         {
             // Arrange
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
