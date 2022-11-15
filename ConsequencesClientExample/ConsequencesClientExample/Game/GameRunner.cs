@@ -1,4 +1,5 @@
-﻿using ConsequencesClientExample.InputOutput;
+﻿using ConsequencesClientExample.Helpers;
+using ConsequencesClientExample.InputOutput;
 using ConsequencesClientExample.Messaging;
 using ConsequencesClientExample.Websocket;
 
@@ -8,87 +9,22 @@ namespace ConsequencesClientExample.Game
     {
         private IThroughput _throughput;
         private ISocketClient _socketClient;
+        private ResponseOutputter _responseOutputter;
 
         public GameRunner(IThroughput throughput, ISocketClient socketClient)
         {
             _throughput = throughput;
             _socketClient = socketClient;
+            _responseOutputter = new ResponseOutputter(_throughput);
         }
 
         public void Start(string uri)
         {
             InitialConnection(uri);
-
-            InboundResponse serverResponse = null;
-            while (true)
-            {
-                RoomSetup();
-                serverResponse = _socketClient.Receive();
-                if (!serverResponse.Message.Contains("ERROR"))
-                {
-                    break;
-                }
-                _throughput.OutputToConsole(serverResponse.Message);
-            }
-
-            var totalQuestions = 0;
-
-            while (totalQuestions < 7)
-            {
-                if (serverResponse.Question != null)
-                {
-                    OutputPlayerList(serverResponse);
-                    OutputMessage(serverResponse);
-                    OutputQuestion(serverResponse);
-                    var playerResponse = _throughput.TakeUserInput();
-                    _socketClient.Send(answer: playerResponse);
-                    totalQuestions++;
-                }
-                else
-                {
-                    OutputMessage(serverResponse);
-                    var playerResponse = _throughput.TakeUserInput();
-                    _socketClient.Send(answer: playerResponse);
-                }
-                serverResponse = _socketClient.Receive();
-            }
-
-            OutputFinalResponses(serverResponse);
+            InboundResponse setupResponse = RoomSetup();
+            InboundResponse finalResponse = QuestionsLoop(setupResponse);
+            _responseOutputter.OutputFinalResponses(finalResponse);
         }
-
-        private void OutputFinalResponses(InboundResponse finalResponse)
-        {
-            if (finalResponse.Results != null)
-            {
-                foreach (var result in finalResponse.Results)
-                {
-                    _throughput.OutputToConsole(result);
-                }
-            }
-        }
-
-        private void OutputQuestion(InboundResponse serverResponse)
-        {
-            _throughput.OutputToConsole($"Question: {serverResponse.Question}");
-        }
-
-        private void OutputMessage(InboundResponse serverResponse)
-        {
-            if (serverResponse.Message != null)
-            {
-                _throughput.OutputToConsole(serverResponse.Message);
-            }
-        }
-
-        private void RoomSetup()
-        {
-            _throughput.OutputToConsole("Name:");
-            var nameInput = _throughput.TakeUserInput();
-            _throughput.OutputToConsole("Room:");
-            var roomInput = _throughput.TakeUserInput();
-            _socketClient.Send(name: nameInput, room: roomInput);
-        }
-
         private void InitialConnection(string uri)
         {
             _socketClient.Connect(uri);
@@ -98,16 +34,72 @@ namespace ConsequencesClientExample.Game
             _throughput.OutputToConsole(initialResponse.Message);
         }
 
-        private void OutputPlayerList(InboundResponse response)
+        private InboundResponse RoomSetup()
         {
-            if (response.Players.Count > 0)
+            InboundResponse serverResponse;
+
+            while (true)
             {
-                _throughput.OutputToConsole("Players:");
-                foreach (var playerName in response.Players)
-                {
-                    _throughput.OutputToConsole(playerName);
-                }
+                SendNameAndRoom();
+                serverResponse = _socketClient.Receive();
+
+                // If there was no error message
+                if (ResponseHelpers.ResponseGood(serverResponse))
+                    break;
+
+                // Output the error message
+                _throughput.OutputToConsole(serverResponse.Message);
             }
+
+            return serverResponse;
+        }
+
+        private void SendNameAndRoom()
+        {
+            _throughput.OutputToConsole("Name:");
+            var nameInput = _throughput.TakeUserInput();
+
+            _throughput.OutputToConsole("Room:");
+            var roomInput = _throughput.TakeUserInput();
+
+            _socketClient.Send(name: nameInput, room: roomInput);
+        }
+
+        private InboundResponse QuestionsLoop(InboundResponse serverResponse)
+        {
+            var totalQuestions = 0;
+
+            while (totalQuestions < 7)
+            {
+                if (ResponseHelpers.ResponseContainsQuestion(serverResponse))
+                {
+                    QuestionReceived(serverResponse);
+                    totalQuestions++;
+                }
+                else
+                {
+                    QuestionNotReceived(serverResponse);
+                }
+                serverResponse = _socketClient.Receive();
+            }
+
+            return serverResponse;
+        }
+
+        private void QuestionReceived(InboundResponse serverResponse)
+        {
+            _responseOutputter.OutputPlayerList(serverResponse);
+            _responseOutputter.OutputMessage(serverResponse);
+            _responseOutputter.OutputQuestion(serverResponse);
+            var playerResponse = _throughput.TakeUserInput();
+            _socketClient.Send(answer: playerResponse);
+        }
+
+        private void QuestionNotReceived(InboundResponse serverResponse)
+        {
+            _responseOutputter.OutputMessage(serverResponse);
+            var playerResponse = _throughput.TakeUserInput();
+            _socketClient.Send(answer: playerResponse);
         }
     }
 }
