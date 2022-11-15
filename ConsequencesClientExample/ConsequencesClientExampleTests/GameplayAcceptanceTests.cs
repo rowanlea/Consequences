@@ -12,6 +12,8 @@ namespace ConsequencesClientExampleTests
     {
         IThroughput throughput;
         ISocketClient socketClient;
+        string uri = "ws://0.0.0.0:1234";
+
         [SetUp]
         public void Setup()
         {
@@ -27,7 +29,6 @@ namespace ConsequencesClientExampleTests
         public void WhenGameRun_SocketClientConnectCalled()
         {
             // Arrange
-            string uri = "ws://0.0.0.0:1234";
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act
@@ -41,7 +42,6 @@ namespace ConsequencesClientExampleTests
         public void WhenGameRun_SocketClientSendCalledWithHello()
         {
             // Arrange
-            string uri = "ws://0.0.0.0:1234";
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act
@@ -55,7 +55,6 @@ namespace ConsequencesClientExampleTests
         public void WhenSocketClientReceivedCalled_OutputReceivesSameMessage()
         {
             // Arrange
-            string uri = "ws://0.0.0.0:1234";
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act
@@ -69,7 +68,6 @@ namespace ConsequencesClientExampleTests
         public void WhenThroughputReceivesNameAndRoom_SocketClientSendsOutboundMessage()
         {
             // Arrange
-            string uri = "ws://0.0.0.0:1234";
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act
@@ -78,5 +76,6 @@ namespace ConsequencesClientExampleTests
             // Assert
             socketClient.Received(1).Send(name: "Rowan", room: "Oak");
         }
+
     }
 }
