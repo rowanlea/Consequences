@@ -26,6 +26,7 @@ The **outputs** the server will send back to you are:
 - "Message" - an information message, generally to advise on what to do next
 - "Players" - a list of players sent with non-error messages for you to see who you are playing with
 - "Question" - a question from the list above, which denotes the server is expecting an answer from you
+- "Results" - a list of results from all of the players
 
 These need to be be JSON formatted, i.e. they will look like the following:
 > {"Message": "Hello"}
@@ -36,6 +37,7 @@ The flow for the game will look something like:
 3. **Client:** Needs to send back "Name" and "Room"
 4. **Server:** Will respond with a series of "Message" containing instructions, and "Question" for the user to respond to, along with a list of "Players"
 5. **Client:** Needs to respond going forwards with a series of "Answer"
+6. **Server:** Will finally give you a "Results" list
 
 ## Example Result
 In the end you will end up with a whole result per person playing the game, each result looking something like:
@@ -54,4 +56,5 @@ There are lots of different methods you could use to TDD this kata:
 To connect to the websocket server you need to use: **ws://51.141.52.52:1234**
 
 ## Notes
-The extra punctuation and words to structure the final results are coded into the server, so you just need to answer the question normally.
+- The extra punctuation and words to structure the final results are coded into the server, so you just need to answer the question normally.
+- If you run multiple tests too quickly one after the other they might run before your room has been cleared up, you can prevent this by using a different room in each of your tests.
