@@ -56,7 +56,10 @@ namespace ConsequencesClientExample.Game
 
         private void OutputMessage(InboundResponse serverResponse)
         {
-            _throughput.OutputToConsole(serverResponse.Message);
+            if (serverResponse.Message != null)
+            {
+                _throughput.OutputToConsole(serverResponse.Message);
+            }
         }
 
         private void RoomSetup()
