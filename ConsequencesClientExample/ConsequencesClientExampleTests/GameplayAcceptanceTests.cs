@@ -1,4 +1,9 @@
-﻿namespace ConsequencesClientExampleTests
+﻿using ConsequencesClientExample.Game;
+using ConsequencesClientExample.InputOutput;
+using ConsequencesClientExample.Websocket;
+using NSubstitute;
+
+namespace ConsequencesClientExampleTests
 {
     internal class GameplayAcceptanceTests
     {
@@ -15,7 +20,7 @@
             gameRunner.Start();
 
             // Assert
-            socketClient.Received().Connect()
+            socketClient.Received().Connect(uri);
         }
     }
 }

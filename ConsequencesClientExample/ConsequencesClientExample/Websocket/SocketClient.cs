@@ -5,7 +5,7 @@ using Websocket.Client;
 
 namespace ConsequencesClientExample.Websocket
 {
-    public class SocketClient
+    public class SocketClient : ISocketClient
     {
         private ManualResetEvent _exitEvent;
         private WebsocketClient _client;
