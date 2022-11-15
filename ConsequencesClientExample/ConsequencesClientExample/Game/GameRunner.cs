@@ -21,11 +21,21 @@ namespace ConsequencesClientExample.Game
             RoomSetup();
 
             var serverResponse = _socketClient.Receive();
-            _throughput.OutputToConsole(serverResponse.Message);
             OutputPlayerList(serverResponse);
-            _throughput.OutputToConsole($"Question: {serverResponse.Question}");
+            OutputMessage(serverResponse);
+            OutputQuestion(serverResponse);
             var playerResponse = _throughput.TakeUserInput();
             _socketClient.Send(answer: playerResponse);
+        }
+
+        private void OutputQuestion(InboundResponse serverResponse)
+        {
+            _throughput.OutputToConsole($"Question: {serverResponse.Question}");
+        }
+
+        private void OutputMessage(InboundResponse serverResponse)
+        {
+            _throughput.OutputToConsole(serverResponse.Message);
         }
 
         private void RoomSetup()
