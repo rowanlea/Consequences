@@ -78,6 +78,7 @@ namespace ConsequencesClientExample.Game
                 }
                 else
                 {
+                    // Either an error or a 'waiting' message
                     QuestionNotReceived(serverResponse);
                 }
                 serverResponse = _socketClient.Receive();
@@ -98,8 +99,14 @@ namespace ConsequencesClientExample.Game
         private void QuestionNotReceived(InboundResponse serverResponse)
         {
             _responseOutputter.OutputMessage(serverResponse);
-            var playerResponse = _throughput.TakeUserInput();
-            _socketClient.Send(answer: playerResponse);
+
+            if (!ResponseHelpers.ResponseGood(serverResponse))
+            {
+                // Player needs to answer again
+                var playerResponse = _throughput.TakeUserInput();
+                _socketClient.Send(answer: playerResponse);
+            }
+
         }
     }
 }
