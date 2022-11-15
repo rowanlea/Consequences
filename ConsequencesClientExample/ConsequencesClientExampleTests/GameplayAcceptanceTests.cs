@@ -17,10 +17,10 @@ namespace ConsequencesClientExampleTests
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
             
             // Act
-            gameRunner.Start();
+            gameRunner.Start(uri);
 
             // Assert
-            socketClient.Received().Connect(uri);
+            socketClient.Received(1).Connect(uri);
         }
     }
 }

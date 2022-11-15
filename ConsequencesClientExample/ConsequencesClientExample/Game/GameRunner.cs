@@ -14,9 +14,9 @@ namespace ConsequencesClientExample.Game
             _socketClient = socketClient;
         }
 
-        internal void Start()
+        public void Start(string uri)
         {
-            throw new NotImplementedException();
+            _socketClient.Connect(uri);
         }
     }
 }
