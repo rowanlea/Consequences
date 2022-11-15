@@ -17,9 +17,17 @@ namespace ConsequencesClientExample.Game
 
         public void Start(string uri)
         {
-            _socketClient.Connect(uri);
-            _socketClient.Send(start: "Hello");
+            InitialConnection(uri);
+            RoomSetup();
 
+            var response = _socketClient.Receive();
+            _throughput.OutputToConsole(response.Message);
+            OutputPlayerList(response);
+
+        }
+
+        private void RoomSetup()
+        {
             var setupResponse = _socketClient.Receive();
             _throughput.OutputToConsole(setupResponse.Message);
 
@@ -29,11 +37,12 @@ namespace ConsequencesClientExample.Game
             var roomInput = _throughput.TakeUserInput();
 
             _socketClient.Send(name: nameInput, room: roomInput);
+        }
 
-            var response = _socketClient.Receive();
-            _throughput.OutputToConsole(response.Message);
-            OutputPlayerList(response);
-
+        private void InitialConnection(string uri)
+        {
+            _socketClient.Connect(uri);
+            _socketClient.Send(start: "Hello");
         }
 
         private void OutputPlayerList(InboundResponse response)
