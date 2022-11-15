@@ -18,21 +18,30 @@ namespace ConsequencesClientExample.Game
         public void Start(string uri)
         {
             InitialConnection(uri);
-            RoomSetup();
+
+            InboundResponse serverResponse = null;
+            while (true)
+            {
+                RoomSetup();
+                serverResponse = _socketClient.Receive();
+                if (!serverResponse.Message.Contains("ERROR"))
+                {
+                    break;
+                }
+                _throughput.OutputToConsole(serverResponse.Message);
+            }
 
             var totalQuestions = 0;
 
             while (totalQuestions < 7)
             {
-                var serverResponse = _socketClient.Receive();
-                if(serverResponse.Question != null)
+                if (serverResponse.Question != null)
                 {
                     OutputPlayerList(serverResponse);
                     OutputMessage(serverResponse);
                     OutputQuestion(serverResponse);
                     var playerResponse = _throughput.TakeUserInput();
                     _socketClient.Send(answer: playerResponse);
-
                     totalQuestions++;
                 }
                 else
@@ -41,15 +50,15 @@ namespace ConsequencesClientExample.Game
                     var playerResponse = _throughput.TakeUserInput();
                     _socketClient.Send(answer: playerResponse);
                 }
+                serverResponse = _socketClient.Receive();
             }
 
-            OutputFinalResponses();
+            OutputFinalResponses(serverResponse);
         }
 
-        private void OutputFinalResponses()
+        private void OutputFinalResponses(InboundResponse finalResponse)
         {
-            var finalResponse = _socketClient.Receive();
-            if(finalResponse.Results != null)
+            if (finalResponse.Results != null)
             {
                 foreach (var result in finalResponse.Results)
                 {
@@ -73,14 +82,10 @@ namespace ConsequencesClientExample.Game
 
         private void RoomSetup()
         {
-            var setupResponse = _socketClient.Receive();
-            _throughput.OutputToConsole(setupResponse.Message);
-
             _throughput.OutputToConsole("Name:");
             var nameInput = _throughput.TakeUserInput();
             _throughput.OutputToConsole("Room:");
             var roomInput = _throughput.TakeUserInput();
-
             _socketClient.Send(name: nameInput, room: roomInput);
         }
 
@@ -88,6 +93,9 @@ namespace ConsequencesClientExample.Game
         {
             _socketClient.Connect(uri);
             _socketClient.Send(start: "Hello");
+
+            var initialResponse = _socketClient.Receive();
+            _throughput.OutputToConsole(initialResponse.Message);
         }
 
         private void OutputPlayerList(InboundResponse response)

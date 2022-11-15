@@ -18,7 +18,7 @@ namespace ConsequencesClientExampleTests
             throughput = Substitute.For<IThroughput>();
             socketClient = Substitute.For<ISocketClient>();
 
-            throughput.TakeUserInput().Returns("Rowan", "Oak",
+            throughput.TakeUserInput().Returns("", "Oak", "Rowan", "Oak",
                 "Happy Henry",
                 "Smiling Sam",
                 "",
@@ -30,6 +30,7 @@ namespace ConsequencesClientExampleTests
 
             socketClient.Receive().Returns(
                 new InboundResponse { Message = "Give name and room code" },
+                new InboundResponse { Message = "ERROR: No 'name' was provided in your response. Please provide your name to play." },
                 new InboundResponse { Message = "Wait for players then answer question", Players = new List<string>() { "Rowan", "Finn" }, Question = "Please enter an adjective, followed by a person's name" },
                 new InboundResponse { Players = new List<string>() { "Rowan", "Finn" }, Question = "Please enter another adjective, followed by a different person's name" },
                 new InboundResponse { Players = new List<string>() { "Rowan", "Finn" }, Question = "Please enter a place where people could meet" },
@@ -216,6 +217,25 @@ namespace ConsequencesClientExampleTests
 
                 throughput.OutputToConsole("Question: Please enter the consequence of their actions");
                 socketClient.Send(answer: "zombies rose from the dead");
+            });
+        }
+
+        [Test]
+        public void WhenErrorMessageReceivedDuringSetup_LetsUserSendSetupAgain()
+        {
+            // Arrange
+            GameRunner gameRunner = new GameRunner(throughput, socketClient);
+
+            // Act
+            gameRunner.Start(uri);
+
+            // Assert
+            Received.InOrder(() =>
+            {
+                socketClient.Send(name: "", room: "Oak");
+                throughput.OutputToConsole("ERROR: No 'name' was provided in your response. Please provide your name to play.");
+                socketClient.Send(name: "Rowan", room: "Oak");
+                throughput.OutputToConsole("Question: Please enter an adjective, followed by a person's name");
             });
         }
     }
