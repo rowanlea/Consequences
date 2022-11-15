@@ -23,7 +23,7 @@ The **inputs** the server will take are as follows:
 - "Answer" - your response to the question returned.
 
 The **outputs** the server will send back to you are:
-- "Message" - an information message, generally to advise on what to do next
+- "Message" - an information message, generally to advise on what to do next. If there's an error this message will begin with "ERROR:"
 - "Players" - a list of players sent with non-error messages for you to see who you are playing with
 - "Question" - a question from the list above, which denotes the server is expecting an answer from you
 - "Results" - a list of results from all of the players
