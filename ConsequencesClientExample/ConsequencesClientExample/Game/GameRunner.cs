@@ -25,13 +25,22 @@ namespace ConsequencesClientExample.Game
             while (totalQuestions < 7)
             {
                 var serverResponse = _socketClient.Receive();
-                OutputPlayerList(serverResponse);
-                OutputMessage(serverResponse);
-                OutputQuestion(serverResponse);
-                var playerResponse = _throughput.TakeUserInput();
-                _socketClient.Send(answer: playerResponse);
+                if(serverResponse.Question != null)
+                {
+                    OutputPlayerList(serverResponse);
+                    OutputMessage(serverResponse);
+                    OutputQuestion(serverResponse);
+                    var playerResponse = _throughput.TakeUserInput();
+                    _socketClient.Send(answer: playerResponse);
 
-                totalQuestions++;
+                    totalQuestions++;
+                }
+                else
+                {
+                    OutputMessage(serverResponse);
+                    var playerResponse = _throughput.TakeUserInput();
+                    _socketClient.Send(answer: playerResponse);
+                }
             }
 
             OutputFinalResponses();
