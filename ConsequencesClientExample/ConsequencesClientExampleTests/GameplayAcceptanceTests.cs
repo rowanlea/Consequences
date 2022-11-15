@@ -89,5 +89,20 @@ namespace ConsequencesClientExampleTests
             // Assert
             throughput.Received(1).OutputToConsole("Wait for players then answer question");
         }
+
+        [Test]
+        public void WhenSocketClientReceivesAnyFurtherMessage_ThroughputOutputsPlayerList()
+        {
+            // Arrange
+            GameRunner gameRunner = new GameRunner(throughput, socketClient);
+
+            // Act
+            gameRunner.Start(uri);
+
+            // Assert
+            throughput.Received(1).OutputToConsole("Players:");
+            throughput.Received(1).OutputToConsole("Rowan");
+            throughput.Received(1).OutputToConsole("Finn");
+        }
     }
 }

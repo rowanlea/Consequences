@@ -1,4 +1,5 @@
 ﻿using ConsequencesClientExample.InputOutput;
+using ConsequencesClientExample.Messaging;
 using ConsequencesClientExample.Websocket;
 
 namespace ConsequencesClientExample.Game
@@ -31,6 +32,20 @@ namespace ConsequencesClientExample.Game
 
             var response = _socketClient.Receive();
             _throughput.OutputToConsole(response.Message);
+            OutputPlayerList(response);
+
+        }
+
+        private void OutputPlayerList(InboundResponse response)
+        {
+            if (response.Players.Count > 0)
+            {
+                _throughput.OutputToConsole("Players:");
+                foreach(var playerName in response.Players)
+                {
+                    _throughput.OutputToConsole(playerName);
+                }
+            }
         }
     }
 }
