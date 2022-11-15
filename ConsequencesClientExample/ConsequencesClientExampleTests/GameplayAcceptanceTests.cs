@@ -2,6 +2,7 @@
 using ConsequencesClientExample.InputOutput;
 using ConsequencesClientExample.Messaging;
 using ConsequencesClientExample.Websocket;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using NSubstitute;
 using System.Reactive;
 
@@ -9,15 +10,26 @@ namespace ConsequencesClientExampleTests
 {
     internal class GameplayAcceptanceTests
     {
+        IThroughput throughput;
+        ISocketClient socketClient;
+        [SetUp]
+        public void Setup()
+        {
+            throughput = Substitute.For<IThroughput>();
+            socketClient = Substitute.For<ISocketClient>();
+
+            throughput.TakeUserInput().Returns("Rowan", "Oak");
+
+            socketClient.Receive().Returns(new InboundResponse { Message = "Give name and room code" });
+        }
+
         [Test]
         public void WhenGameRun_SocketClientConnectCalled()
         {
             // Arrange
             string uri = "ws://0.0.0.0:1234";
-            IThroughput throughput = Substitute.For<IThroughput>();
-            ISocketClient socketClient = Substitute.For <ISocketClient>();
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
-            
+
             // Act
             gameRunner.Start(uri);
 
@@ -30,11 +42,9 @@ namespace ConsequencesClientExampleTests
         {
             // Arrange
             string uri = "ws://0.0.0.0:1234";
-            IThroughput throughput = Substitute.For<IThroughput>();
-            ISocketClient socketClient = Substitute.For<ISocketClient>();
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
-            // Act, plus pre-arranged acting through mocks
+            // Act
             gameRunner.Start(uri);
 
             // Assert
@@ -46,12 +56,9 @@ namespace ConsequencesClientExampleTests
         {
             // Arrange
             string uri = "ws://0.0.0.0:1234";
-            IThroughput throughput = Substitute.For<IThroughput>();
-            ISocketClient socketClient = Substitute.For<ISocketClient>();
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
-            // Act, plus pre-arranged acting through mocks
-            socketClient.Receive().Returns(new InboundResponse { Message =  "Give name and room code"});
+            // Act
             gameRunner.Start(uri);
 
             // Assert
@@ -63,13 +70,9 @@ namespace ConsequencesClientExampleTests
         {
             // Arrange
             string uri = "ws://0.0.0.0:1234";
-            IThroughput throughput = Substitute.For<IThroughput>();
-            ISocketClient socketClient = Substitute.For<ISocketClient>();
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
-            // Act, plus pre-arranged acting through mocks
-            socketClient.Receive().Returns(new InboundResponse { Message = "Give name and room code" });
-            throughput.TakeUserInput().Returns("Rowan", "Oak");
+            // Act
             gameRunner.Start(uri);
 
             // Assert
