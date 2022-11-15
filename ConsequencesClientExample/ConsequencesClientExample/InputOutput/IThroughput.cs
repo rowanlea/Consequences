@@ -2,7 +2,7 @@
 {
     public interface IThroughput
     {
-        string TakeUserInput();
+        string TakeUserInput(string messageToUser);
         void OutputToConsole(string message);
     }
 }

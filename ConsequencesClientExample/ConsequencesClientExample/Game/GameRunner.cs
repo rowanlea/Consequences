@@ -18,11 +18,12 @@ namespace ConsequencesClientExample.Game
         {
             _socketClient.Connect(uri);
 
-            var input = _throughput.TakeUserInput();
-            _socketClient.Send(start: input);
+            _socketClient.Send(start: "Hello");
 
             var response = _socketClient.Receive();
             _throughput.OutputToConsole(response.Message);
+
+            //var input = _throughput.TakeUserInput("Ple");
         }
     }
 }

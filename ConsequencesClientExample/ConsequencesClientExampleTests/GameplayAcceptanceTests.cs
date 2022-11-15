@@ -35,7 +35,6 @@ namespace ConsequencesClientExampleTests
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act, plus pre-arranged acting through mocks
-            throughput.TakeUserInput().Returns("Hello");
             gameRunner.Start(uri);
 
             // Assert
@@ -52,7 +51,6 @@ namespace ConsequencesClientExampleTests
             GameRunner gameRunner = new GameRunner(throughput, socketClient);
 
             // Act, plus pre-arranged acting through mocks
-            throughput.TakeUserInput().Returns("Hello");
             socketClient.Receive().Returns(new InboundResponse { Message =  "Give name and room code"});
             gameRunner.Start(uri);
 
