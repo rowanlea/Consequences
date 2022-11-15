@@ -20,7 +20,7 @@ namespace ConsequencesClientExampleTests
             throughput = Substitute.For<IThroughput>();
             socketClient = Substitute.For<ISocketClient>();
 
-            throughput.TakeUserInput().Returns("Rowan", "Oak");
+            throughput.TakeUserInput().Returns("Rowan", "Oak", "answer to question 1");
 
             socketClient.Receive().Returns(new InboundResponse { Message = "Give name and room code" }, new InboundResponse { Message = "Wait for players then answer question", Players = new List<string>() { "Rowan", "Finn" }, Question = "Question 1" });
         }
@@ -103,6 +103,20 @@ namespace ConsequencesClientExampleTests
             throughput.Received(1).OutputToConsole("Players:");
             throughput.Received(1).OutputToConsole("Rowan");
             throughput.Received(1).OutputToConsole("Finn");
+        }
+
+        [Test]
+        public void WhenSocketClientReceivesAnyFurtherMessage_ThroughputOutputsQuestion_SendsAnswer()
+        {
+            // Arrange
+            GameRunner gameRunner = new GameRunner(throughput, socketClient);
+
+            // Act
+            gameRunner.Start(uri);
+
+            // Assert
+            throughput.Received(1).OutputToConsole("Question: Question 1");
+            socketClient.Received(1).Send(answer: "answer to question 1");
         }
     }
 }

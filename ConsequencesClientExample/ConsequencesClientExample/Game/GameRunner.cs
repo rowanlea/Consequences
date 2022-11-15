@@ -20,10 +20,12 @@ namespace ConsequencesClientExample.Game
             InitialConnection(uri);
             RoomSetup();
 
-            var response = _socketClient.Receive();
-            _throughput.OutputToConsole(response.Message);
-            OutputPlayerList(response);
-
+            var serverResponse = _socketClient.Receive();
+            _throughput.OutputToConsole(serverResponse.Message);
+            OutputPlayerList(serverResponse);
+            _throughput.OutputToConsole($"Question: {serverResponse.Question}");
+            var playerResponse = _throughput.TakeUserInput();
+            _socketClient.Send(answer: playerResponse);
         }
 
         private void RoomSetup()
