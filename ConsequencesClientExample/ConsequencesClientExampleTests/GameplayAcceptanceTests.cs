@@ -42,7 +42,7 @@ namespace ConsequencesClientExampleTests
         }
 
         [Test]
-        public void WhenGameRun_AndSocketClientReceivedCalled_OutputReceivesSameMessage()
+        public void WhenSocketClientReceivedCalled_OutputReceivesSameMessage()
         {
             // Arrange
             string uri = "ws://0.0.0.0:1234";
@@ -56,6 +56,24 @@ namespace ConsequencesClientExampleTests
 
             // Assert
             throughput.Received(1).OutputToConsole("Give name and room code");
+        }
+
+        [Test]
+        public void WhenThroughputReceivesNameAndRoom_SocketClientSendsOutboundMessage()
+        {
+            // Arrange
+            string uri = "ws://0.0.0.0:1234";
+            IThroughput throughput = Substitute.For<IThroughput>();
+            ISocketClient socketClient = Substitute.For<ISocketClient>();
+            GameRunner gameRunner = new GameRunner(throughput, socketClient);
+
+            // Act, plus pre-arranged acting through mocks
+            socketClient.Receive().Returns(new InboundResponse { Message = "Give name and room code" });
+            throughput.TakeUserInput().Returns("Rowan", "Oak");
+            gameRunner.Start(uri);
+
+            // Assert
+            socketClient.Received(1).Send(name: "Rowan", room: "Oak");
         }
     }
 }
