@@ -1,11 +1,11 @@
-package main;
+import com.google.gson.Gson;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.WebSocket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletionStage;
-import com.google.gson.Gson;
+import java.util.concurrent.LinkedBlockingDeque;
 
 public class SocketClient {
     WebSocket ws;
@@ -30,15 +30,15 @@ public class SocketClient {
     public InboundMessage Receive()
     {
         String jsonMessage = wsc.GetMessageFromQueue();
-        return gson.fromJson(jsonMessage);
+        return gson.fromJson(jsonMessage, InboundMessage.class);
     }
 
     private static class WebSocketClient implements WebSocket.Listener {
-        private BlockingQueue<String> messageList;
+        private final BlockingQueue<String> messageList;
 
         public WebSocketClient()
         {
-            messageList = new LinkedBlockingQueque<String>();
+            messageList = new LinkedBlockingDeque<String>();
         }
 
         public String GetMessageFromQueue()
