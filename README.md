@@ -1,6 +1,8 @@
 # Tonight's JetBrains Raffle
 Link to [Raffle](https://docs.google.com/forms/d/e/1FAIpQLSf8YYaqvt7HmRLq1663nCxxrKg-bY7_iXmpo5vntmV-dD_e3A/viewform)
 
+Or e-mail rowan.lea@codurance.com if you don't have/want to make a Google account.
+
 # Consequences
 ## Overview
 Today we'll be playing a game called Consequences ([Wikipedia](https://en.wikipedia.org/wiki/Consequences_(game))). This is an old parlour game traditionally played with pen and paper, where players are asked a series of questions and have to respond by writing their answer on a piece of paper, folding their answer over, and then passing their piece of paper on to the person sitting next to them, cumulating in a funny/interesting story at the end, when all of the questions have been asked.
