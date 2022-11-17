@@ -28,7 +28,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.11
+          dotnet-version: 3.1.x
 
       - name: Build
         shell: bash
