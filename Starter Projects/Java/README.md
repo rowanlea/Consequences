@@ -2,7 +2,7 @@
 Has its own .gitignore for Java specifically.
 
 # Building The Project
-Disclaimer: I know next to nothing about Java. There was some kind of mix of downloading Java SDK 19, setting something (language version?) to 11, and then downloading Maven to install gson.
+Disclaimer: I know next to nothing about Java, but you should just need to make sure you have JDK installed, and have/let Maven run in your project.
 
 
 Install Maven: https://maven.apache.org/install.html
