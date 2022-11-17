@@ -15,7 +15,7 @@ For our game of consequences we have a preset list of questions we're going to f
 - "Please enter the consequence of their actions"
 
 ## The Task
-The aim of the challenge is to create a websocket client to connect to a pre-established server that allows the user to play the game.
+The aim of the challenge is to create a game client using the Websockets protocol to connect to a pre-established server, that allows a user to play the game by entering their own inputs and displaying the responses the server sends back.
 
 ## Inputs/Outputs
 For the server to work successfully there are a few steps you need to follow with the information you send to the server.
