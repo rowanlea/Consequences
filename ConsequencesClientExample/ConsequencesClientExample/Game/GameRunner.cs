@@ -22,9 +22,24 @@ namespace ConsequencesClientExample.Game
         {
             InitialConnection(uri);
             InboundResponse setupResponse = RoomSetup();
-            InboundResponse finalResponse = QuestionsLoop(setupResponse);
-            _responseOutputter.OutputFinalResponses(finalResponse);
+            InboundResponse finalQuestionResponse = QuestionsLoop(setupResponse);
+            ShowResults(finalQuestionResponse);
         }
+
+        private void ShowResults(InboundResponse finalQuestionResponse)
+        {
+            _responseOutputter.OutputMessage(finalQuestionResponse);
+            if (finalQuestionResponse.Results != null && finalQuestionResponse.Results.Count > 0)
+            {
+                _responseOutputter.OutputFinalResponses(finalQuestionResponse);
+            }
+            else
+            {
+                InboundResponse results = _socketClient.Receive();
+                _responseOutputter.OutputFinalResponses(results);
+            }
+        }
+
         private void InitialConnection(string uri)
         {
             _socketClient.Connect(uri);
