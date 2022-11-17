@@ -1,3 +1,6 @@
+# Tonight's JetBrains Raffle
+Link to [Raffle](https://docs.google.com/forms/d/e/1FAIpQLSf8YYaqvt7HmRLq1663nCxxrKg-bY7_iXmpo5vntmV-dD_e3A/viewform)
+
 # Consequences
 ## Overview
 Today we'll be playing a game called Consequences ([Wikipedia](https://en.wikipedia.org/wiki/Consequences_(game))). This is an old parlour game traditionally played with pen and paper, where players are asked a series of questions and have to respond by writing their answer on a piece of paper, folding their answer over, and then passing their piece of paper on to the person sitting next to them, cumulating in a funny/interesting story at the end, when all of the questions have been asked.
@@ -17,7 +20,8 @@ The aim of the challenge is to create a websocket client to connect to a pre-est
 ## Inputs/Outputs
 For the server to work successfully there are a few steps you need to follow with the information you send to the server.
 
-The **inputs** the server will take are as follows:
+The **inputs** here are the messages you need to send to the server from the clients you are developing:
+- "Hello" - an initial message to send to the server as a hand shake, this can actually be any message you want, it doesn't need to be "Hello"
 - "Name" - the name in which other people will identify you.
 - "Room" - an identifier used to play with specific people in a session. You can also be in a room by yourself.
 - "Answer" - your response to the question returned.
@@ -31,6 +35,7 @@ The **outputs** the server will send back to you are:
 These need to be be JSON formatted, i.e. they will look like the following:
 > {"Message": "Hello"}
 
+## Game Flow
 The flow for the game will look something like:
 1. **Client:** initial message, can be any message at all, JSON or otherwise
 2. **Server:** Will respond with a welcome "Message" and prompt for some information
@@ -59,4 +64,3 @@ To connect to the websocket server you need to use: **ws://51.141.52.52:1234**
 - The extra punctuation and words to structure the final results are coded into the server, so you just need to answer the question normally.
 - If you run multiple tests too quickly one after the other they might run before your room has been cleared up, you can prevent this by using a different room in each of your tests.
 - If you TDD a solo game your answer responses will always contain the next question, however if you play a multiplayer game you will receive a "waiting for other players" message if you answer first, so you can't always rely on a question/answer only flow.
-
