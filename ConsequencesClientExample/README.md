@@ -11,10 +11,12 @@ It was done using:
 ## TDD Approach
 When doing this kata I decided to run two series of acceptance tests, one for the Websocket client implementation, and one for the game loop.
 
-This allowed me to integration test the Websocket side to make sure I could successfully connect to the server, and verify both the technology and connection worked properly.
-This then allowed me to use mocking to TDD the logic of the game loop completely separately, so I could focus on just the logic of the gameplay.
+This allowed me to integration test the Websocket side to make sure I could successfully connect to the server, and verify both the technology and connection worked properly. I used these tests to make sure the expected responses came back from the server too, as can be seen in the tests.
+
+This then allowed me to TDD the logic of the game loop completely separately, so I could focus on just the logic of the gameplay, whilst using mocks for the input/ouput of the game client itself, and for the server connection.
 
 I developed this using a combination of inside-out and outside-in TDD, creating a series of small incremental acceptance tests to progress the functionality of the client.
+
 You can see this progression by reading the WebsocketAcceptanceTests and the GameplayAcceptanceTests in order, or by looking through my commit history.
 
 ## End Result
