@@ -19,6 +19,8 @@ I developed this using a combination of inside-out and outside-in TDD, creating 
 
 You can see this progression by reading the WebsocketAcceptanceTests and the GameplayAcceptanceTests in order, or by looking through my commit history.
 
+Finally I was able to do some cleanliness refactoring without fear of breaking my code.
+
 ## End Result
 The end result of my TDD approach was:
 - the whole solution was easy to create
