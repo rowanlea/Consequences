@@ -118,9 +118,7 @@ namespace ConsequencesClientExampleTests
             gameRunner.Start(uri);
 
             // Assert
-            throughput.Received().OutputToConsole("Players:");
-            throughput.Received().OutputToConsole("Rowan");
-            throughput.Received().OutputToConsole("Finn");
+            throughput.Received().OutputToConsole("Players: Rowan, Finn");
         }
 
         [Test]

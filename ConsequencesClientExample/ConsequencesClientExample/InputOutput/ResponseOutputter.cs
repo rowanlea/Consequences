@@ -30,11 +30,14 @@ namespace ConsequencesClientExample.InputOutput
         {
             if (response.Players.Count > 0)
             {
-                _throughput.OutputToConsole("Players:");
+                string players = "Players: ";
                 foreach (var playerName in response.Players)
                 {
-                    _throughput.OutputToConsole(playerName);
+                    players += $"{playerName}, ";
                 }
+                players = players.TrimEnd(' ');
+                players = players.TrimEnd(',');
+                _throughput.OutputToConsole(players);
             }
         }
 
